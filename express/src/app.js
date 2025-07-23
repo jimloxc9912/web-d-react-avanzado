@@ -44,7 +44,14 @@ app.get('/api/peliculas/comedia/:pais', (req, res) => {
 })
 
 app.use(express.json())
-
+app.post('/api/peliculas', (req, res) => {
+  const nuevaPelicula = req.body
+  console.log(nuevaPelicula)
+  res.status(201).send({
+    mensaje: 'Pelicula creada con éxito',
+    datos: nuevaPelicula
+  })
+})
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
