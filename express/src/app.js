@@ -71,19 +71,69 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT
 // Funcion que lee la informacion de deb.json
-
 const readData = () => {
-  try{
-    
+  try {
+    const data = fs.readFileSync('./src/db.json')
+    return JSON.parse(data)
+  } catch (error) {
+    console.error(error)
   }
-  const data = fs.readFileSync('./db.json', 'utf-8')
-  console.log(data)
 }
-
+console.log(readData())
 readData()
 
+// Función que escribe dentro de db.json
+const writeData = (data) => {
+  try {
+    fs.writeFileSync('./src/db.json', JSON.stringify(data))
+  } catch (error) {
+    console.error(error)
+  }
+  // return JSON.stringify(data)
+}
 app.get('/', (req, res) => {
   res.send('Hola mundo')
+})
+
+app.get('/peliculas/:id', (req, res) => {
+  const id = parseInt(req.params.id)
+  const result = readData().accion.find(pelicula => pelicula.id === id)
+  res.json(result)
+})
+
+app.use(express.json())
+app.post('/peliculas', (req, res) => {
+  const data = readData()
+  const body = req.body
+  const newMovie = {
+    id: data.accion.length + 1,
+    ...body
+  }
+  data.accion.push(newMovie)
+  writeData(data)
+  res.json(newMovie)
+})
+
+app.put('/peliculas/:id', (req, res) => {
+  const data = readData()
+  const id = parseInt(req.params.id)
+  const body = req.body
+  const peliculaIndex = data.accion.findIndex(movie => movie.id === id)
+  data.accion[peliculaIndex] = {
+    ...data.accion[peliculaIndex],
+    ...body
+  }
+  writeData(data)
+  res.json({ message: 'Pelicula actualizada correctamente' })
+})
+
+app.delete('/peliculas/:id', (req, res) => {
+  const data = readData()
+  const id = parseInt(req.params.id)
+  const peliculaIndex = data.accion.findIndex(movie => movie.id === id)
+  data.accion.splice(peliculaIndex, 1)
+  writeData(data)
+  res.json({ message: 'Pelicula eliminada correctamente' })
 })
 
 app.listen(PORT, () => {
