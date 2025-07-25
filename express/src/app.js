@@ -1,3 +1,4 @@
+/* inicia app.js
 require('dotenv').config()
 // console.log(process.env.PORT)
 // console.log(process.env.NOMBRE)
@@ -21,7 +22,7 @@ app.get('/api/peliculas', (req, res) => {
 
 app.get('/api/peliculas/accion/titulo/:titulo/:year', (req, res) => {
   /* const titulo = req.params.titulo
-  const year = req.params.year */
+  const year = req.params.year
   const { titulo, year } = req.params
   const resultados = infoPeliculas.accion.filter(pelicula => pelicula.titulo === titulo && pelicula.year === Number(year))
 
@@ -52,6 +53,39 @@ app.post('/api/peliculas', (req, res) => {
     datos: nuevaPelicula
   })
 })
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`)
+})
+*/
+
+// express y dotenv con ESModules clase 6
+
+import express from 'express'
+import dotenv from 'dotenv'
+import fs from 'fs'
+
+dotenv.config()
+
+// 2. crear la aplicacion de express
+
+const app = express()
+const PORT = process.env.PORT
+// Funcion que lee la informacion de deb.json
+
+const readData = () => {
+  try{
+    
+  }
+  const data = fs.readFileSync('./db.json', 'utf-8')
+  console.log(data)
+}
+
+readData()
+
+app.get('/', (req, res) => {
+  res.send('Hola mundo')
+})
+
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
