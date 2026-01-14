@@ -1,7 +1,10 @@
-import React from 'react'
+// rafc
+import { BasicForm } from './components/BasicFrom'
 
 export const App = () => {
-return (
-<div>App</div>
+  return (
+    <div>
+      <BasicForm />
+    </div>
   )
 }
